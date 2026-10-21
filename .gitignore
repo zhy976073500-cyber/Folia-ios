@@ -1,0 +1,7 @@
+node_modules/
+ios/
+# 1024 图标由 CI 从 resources/icon.svg 生成，不入库（二进制无法走文本推送通道）
+resources/icon.png
+*.ipa
+Payload/
+.DS_Store
