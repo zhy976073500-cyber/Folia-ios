@@ -1,0 +1,67 @@
+name: Build iOS IPA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Render 1024x1024 icon from SVG
+        run: |
+          node -e "try { require('sharp'); } catch (e) { process.exit(3); }" \
+            || npm install --no-save sharp@0.34 --no-audit --no-fund
+          node -e "require('sharp')('resources/icon.svg').resize(1024, 1024).png().toFile('resources/icon.png').then(() => console.log('icon rendered'))"
+
+      - name: Add iOS platform
+        run: npx cap add ios
+
+      - name: Generate app icons and splash screens
+        run: npx capacitor-assets generate --ios --iconBackgroundColor '#09090b' --splashBackgroundColor '#09090b'
+
+      - name: Sync web assets and plugins
+        run: npx cap sync ios
+
+      - name: Build unsigned .app
+        run: |
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath "$RUNNER_TEMP/build" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_IDENTITY="" \
+            build
+
+      - name: Package IPA
+        run: |
+          APP_PATH=$(find "$RUNNER_TEMP/build/Build/Products" -name "*.app" -maxdepth 3 | head -1)
+          echo "Built app: $APP_PATH"
+          test -n "$APP_PATH"
+          mkdir -p Payload
+          cp -R "$APP_PATH" Payload/
+          zip -qry Folia.ipa Payload
+          ls -lh Folia.ipa
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Folia-iOS-IPA
+          path: Folia.ipa
+          if-no-files-found: error
