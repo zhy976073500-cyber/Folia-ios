@@ -4,12 +4,12 @@ import type { CapacitorConfig } from '@capacitor/cli';
 // 网站侧的更新（公告、功能、后端地址）会即时到达 App，无需重新打包。
 
 const config: CapacitorConfig = {
-  appId: 'com.coco.folia',
-  appName: 'Folia',
+  appId: 'com.coco.folia.local',
+  appName: 'Folia本地版',
   webDir: 'www',
   backgroundColor: '#09090b',
   server: {
-    url: 'https://folia.cococcfans.cn',
+    url: 'https://local.cococcfans.cn',
     cleartext: false,
   },
   ios: {
