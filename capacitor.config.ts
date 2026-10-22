@@ -9,7 +9,7 @@ const config: CapacitorConfig = {
   webDir: 'www',
   backgroundColor: '#09090b',
   server: {
-    url: 'https://folia-major-flax-xi.vercel.app',
+    url: 'https://folia.cococcfans.cn',
     cleartext: false,
   },
   ios: {

@@ -16,18 +16,21 @@
       </feMerge>
     </filter>
   </defs>
-  
-  <!-- Background Container: Soft Rounded Square with Gradient -->
-  <rect x="32" y="32" width="448" height="448" rx="120" fill="url(#folia_gradient)" />
-  
-  <!-- Stylized F Logo -->
-  <g filter="url(#dropShadow)">
+
+  <!-- Full-bleed gradient background: fills the whole canvas edge to edge.
+       iOS applies its own rounded-corner mask, so no rounded rect and no
+       transparent margin here (a margin composites onto black = dark edge). -->
+  <rect x="0" y="0" width="512" height="512" fill="url(#folia_gradient)" />
+
+  <!-- Stylized F Logo, scaled from the original tile layout (tile was
+       32..480) so it keeps the same relative size on the full canvas. -->
+  <g filter="url(#dropShadow)" transform="translate(-36.571 -36.571) scale(1.142857)">
     <!-- Vertical Stem -->
     <path d="M160 128 C 160 110 175 110 190 110 H 220 C 235 110 250 125 250 140 V 372 C 250 388 235 402 220 402 H 190 C 175 402 160 388 160 372 V 128 Z" fill="white"/>
-    
+
     <!-- Top Bar (Leaf Shape) -->
     <path d="M240 110 H 340 C 380 110 400 140 400 170 C 400 200 360 200 340 200 H 250 V 110 Z" fill="white"/>
-    
+
     <!-- Middle Bar (Smaller Leaf Shape) -->
     <path d="M250 240 H 320 C 350 240 360 260 360 280 C 360 300 340 300 320 300 H 250 V 240 Z" fill="white"/>
   </g>
