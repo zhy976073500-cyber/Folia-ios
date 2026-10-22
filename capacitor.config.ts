@@ -1,17 +1,14 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
-// Folia iOS 壳：App 打开后直接加载 Sage 自建的 Folia 实例（远程页面），
-// 网站侧的更新（公告、功能、后端地址）会即时到达 App，无需重新打包。
+// Folia 本地版 iOS 壳：前端页面在打包时从 folia-major 的 local-only 分支构建并内置进
+// App（见 scripts/build-frontend.mjs），打开不加载任何远程网址、不请求任何音乐平台，
+// 只播放用户导入到手机本地的音乐文件。
 
 const config: CapacitorConfig = {
   appId: 'com.coco.folia.local',
   appName: 'Folia本地版',
   webDir: 'www',
   backgroundColor: '#09090b',
-  server: {
-    url: 'https://local.cococcfans.cn',
-    cleartext: false,
-  },
   ios: {
     contentInset: 'never',
     backgroundColor: '#09090b',
